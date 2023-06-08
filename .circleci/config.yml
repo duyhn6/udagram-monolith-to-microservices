@@ -39,13 +39,13 @@ jobs:
 
             docker-compose -f docker-compose-build.yaml build --parallel
 
-            docker tag udagram-api-feed duyhn6/udagram-api-feed:v1
+            docker tag udagram-api-feed duyhn6/udagram-api-feed:lastest
 
-            docker tag udagram-api-user duyhn6/udagram-api-user:v1
+            docker tag udagram-api-user duyhn6/udagram-api-user:lastest
 
-            docker tag reverseproxy duyhn6/reverseproxy:v1
+            docker tag reverseproxy duyhn6/reverseproxy:lastest
 
-            docker tag udagram-frontend:local duyhn6/udagram-frontend:v1
+            docker tag udagram-frontend:local duyhn6/udagram-frontend:lastest
 
       - run:
 
@@ -55,13 +55,13 @@ jobs:
 
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-            docker push duyhn6/udagram-api-feed:v1
+            docker push duyhn6/udagram-api-feed:lastest
 
-            docker push duyhn6/udagram-api-user:v1
+            docker push duyhn6/udagram-api-user:lastest
 
-            docker push duyhn6/reverseproxy:v1
+            docker push duyhn6/reverseproxy:lastest
 
-            docker push duyhn6/udagram-frontend:v1
+            docker push duyhn6/udagram-frontend:lastest
 
 workflows:
 
