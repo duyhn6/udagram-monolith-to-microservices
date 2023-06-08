@@ -1,0 +1,72 @@
+# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
+
+version: 2.1
+
+
+
+
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+
+# See: https://circleci.com/docs/orb-intro/
+
+orbs:
+
+  docker: circleci/docker@2.2.0
+
+# See: https://circleci.com/docs/configuration-reference/#workflows
+
+
+
+
+
+jobs:
+
+  build-and-push:
+
+    executor: docker/docker
+
+    steps:
+
+      - checkout
+
+      - setup_remote_docker
+
+      - run:
+
+          name: Build docker image
+
+          command: |
+
+            docker-compose -f docker-compose-build.yaml build --parallel
+
+            docker tag udagram-api-feed duyhn6/udagram-api-feed:v1
+
+            docker tag udagram-api-user duyhn6/udagram-api-user:v1
+
+            docker tag reverseproxy duyhn6/reverseproxy:v1
+
+            docker tag udagram-frontend:local duyhn6/udagram-frontend:v1
+
+      - run:
+
+          name: Publish Docker Image to Docker Hub
+
+          command: |
+
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+            docker push duyhn6/udagram-api-feed:v1
+
+            docker push duyhn6/udagram-api-user:v1
+
+            docker push duyhn6/reverseproxy:v1
+
+            docker push duyhn6/udagram-frontend:v1
+
+workflows:
+
+  default:
+
+    jobs:
+
+      - build-and-push
